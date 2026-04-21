@@ -172,9 +172,10 @@
 
   /* Force Form Usage on Mobile */
   .grid-read-only {
-    pointer-events: none;
+    pointer-events: none !important;
     opacity: 0.6;
     user-select: none;
+    touch-action: none;
     filter: saturate(0.5);
   }
 

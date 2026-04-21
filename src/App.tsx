@@ -588,6 +588,27 @@ export default function App() {
     return () => container.removeEventListener('touchend', handleTouchEnd);
   }, [clearSelection]);
 
+  // HARD LOCK: Disable all grid interactions on mobile
+  useLayoutEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (!isMobile || !gridContainerRef.current) return;
+
+    const blocker = (e: Event) => {
+      e.stopImmediatePropagation();
+      // We don't preventDefault() to allow normal scrolling via translate/transform
+      // but we block selection events.
+    };
+
+    const grid = gridContainerRef.current;
+    const events = ["mousedown", "mouseup", "click", "touchstart"];
+    
+    events.forEach(evt => grid.addEventListener(evt, blocker, { capture: true, passive: false }));
+    
+    return () => {
+      events.forEach(evt => grid.removeEventListener(evt, blocker, { capture: true }));
+    };
+  }, []);
+
   const closeModal = () => {
     setEditingKeys([]);
     setSelectedKeys([]);
