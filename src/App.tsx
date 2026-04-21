@@ -234,6 +234,9 @@ export default function App() {
   const [manualVehicle, setManualVehicle] = useState('');
   const [manualStartDate, setManualStartDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [manualEndDate, setManualEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  
+  // Modal swipe-to-close state
+  const [modalTouchStartY, setModalTouchStartY] = useState(0);
 
   useEffect(() => {
     // Update 'today' every minute so it reflects day rollovers if left open
@@ -1365,13 +1368,25 @@ export default function App() {
 
       {/* EDIT MODAL OVERLAY */}
       {editingKeys.length > 0 && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-[#333] animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+        >
+          <div 
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-[#333] animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative"
+            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+            onTouchMove={(e) => {
+              const diff = e.touches[0].clientY - modalTouchStartY;
+              if (diff > 80) closeModal(); // swipe down threshold
+            }}
+          >
+            {/* Standardized Close Button */}
+            <button onClick={closeModal} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
+
             <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111]">
               <h3 className="font-semibold text-lg text-white">Réservation</h3>
-              <button onClick={closeModal} className="text-gray-400 hover:text-white transition-colors">
-                <X size={20} />
-              </button>
             </div>
             
             <div className="p-5 space-y-4">
@@ -1485,66 +1500,26 @@ export default function App() {
         </div>
       )}
 
-      {/* NEW VEHICLE MODAL */}
-      {newVehicleModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-[#333] animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet">
-            <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111]">
-              <h3 className="font-semibold text-lg text-white">Nouveau véhicule</h3>
-              <button 
-                onClick={() => {
-                  setNewVehicleModalOpen(false);
-                  setNewVehicleName('');
-                }} 
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="p-5 space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Nom du véhicule</label>
-                <input
-                  type="text"
-                  value={newVehicleName}
-                  onChange={(e) => setNewVehicleName(e.target.value)}
-                  className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-luxury-gold transition-colors"
-                  placeholder="Ex: PORSCHE 911"
-                  autoFocus
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleAddVehicle();
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="p-4 border-t border-[#333] bg-[#111] flex justify-end gap-2">
-              <button 
-                onClick={() => {
-                  setNewVehicleModalOpen(false);
-                  setNewVehicleName('');
-                }}
-                className="px-4 py-2 text-sm font-medium hover:text-white transition-colors text-gray-400"
-              >
-                Annuler
-              </button>
-              <button 
-                onClick={handleAddVehicle}
-                className="px-6 py-2 bg-luxury-gold hover:bg-luxury-gold-hover text-black font-semibold rounded shadow transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
-                disabled={!newVehicleName.trim()}
-              >
-                Ajouter
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* VEHICLE DETAILS MODAL */}
       {vehicleDetailsModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[80vh] modal-bottom-sheet">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setVehicleDetailsModal(null); }}
+        >
+          <div 
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[80vh] modal-bottom-sheet relative"
+            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+            onTouchMove={(e) => {
+              const diff = e.touches[0].clientY - modalTouchStartY;
+              if (diff > 80) setVehicleDetailsModal(null); // swipe down threshold
+            }}
+          >
+            {/* Standardized Close Button */}
+            <button onClick={() => setVehicleDetailsModal(null)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
+
             <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0">
               <div className="flex items-center gap-3">
                 <div className="bg-luxury-gold/10 p-1.5 rounded text-luxury-gold">
@@ -1555,12 +1530,6 @@ export default function App() {
                   <p className="text-xs text-luxury-gold tracking-widest uppercase">Historique des réservations</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setVehicleDetailsModal(null)} 
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <X size={20} />
-              </button>
             </div>
             
             <div className="p-0 overflow-auto flex-1 bg-black/20">
@@ -1643,8 +1612,23 @@ export default function App() {
 
       {/* DELETE VEHICLE MODAL */}
       {vehicleToDelete && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[80vh] modal-bottom-sheet">
+        <div 
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setVehicleToDelete(null); }}
+        >
+          <div 
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[80vh] modal-bottom-sheet relative"
+            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+            onTouchMove={(e) => {
+              const diff = e.touches[0].clientY - modalTouchStartY;
+              if (diff > 80) setVehicleToDelete(null); // swipe down threshold
+            }}
+          >
+            {/* Standardized Close Button */}
+            <button onClick={() => setVehicleToDelete(null)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
+
             <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0">
               <div className="flex items-center gap-3">
                 <div className="bg-status-red/20 p-1.5 rounded text-status-red">
@@ -1655,12 +1639,6 @@ export default function App() {
                   <p className="text-[10px] text-status-red uppercase tracking-widest font-bold">Action irréversible</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setVehicleToDelete(null)} 
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <X size={20} />
-              </button>
             </div>
             
             <div className="p-0 overflow-auto flex-1 bg-black/20">
@@ -1767,10 +1745,78 @@ export default function App() {
         </div>
       )}
 
+      {/* NEW VEHICLE MODAL */}
+      {newVehicleModalOpen && (
+        <div 
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setNewVehicleModalOpen(false); }}
+        >
+          <div 
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative"
+            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+            onTouchMove={(e) => {
+              const diff = e.touches[0].clientY - modalTouchStartY;
+              if (diff > 80) setNewVehicleModalOpen(false); // swipe down threshold
+            }}
+          >
+            {/* Standardized Close Button */}
+            <button onClick={() => setNewVehicleModalOpen(false)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
+
+            <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111]">
+              <div className="flex items-center gap-2 text-luxury-gold">
+                <Plus size={18} />
+                <h3 className="font-semibold text-lg text-white">Nouveau Véhicule</h3>
+              </div>
+            </div>
+            
+            <div className="p-5 space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Nom du véhicule</label>
+                <input
+                  type="text"
+                  value={newVehicleName}
+                  onChange={(e) => setNewVehicleName(e.target.value)}
+                  className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2.5 text-sm text-white focus:outline-none focus:border-luxury-gold transition-colors"
+                  placeholder="EX: RANGE ROVER VELAR"
+                  autoFocus
+                />
+              </div>
+            </div>
+
+            <div className="p-4 border-t border-[#333] bg-[#111]">
+              <button 
+                onClick={handleAddVehicle}
+                className="w-full py-3 bg-luxury-gold hover:bg-luxury-gold-hover text-black font-bold rounded-lg shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2"
+              >
+                <CheckCircle2 size={18} />
+                Ajouter le véhicule
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* APPORTEURS RANKING MODAL */}
       {rankingModalOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[85vh] modal-bottom-sheet">
+        <div 
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setRankingModalOpen(false); }}
+        >
+          <div 
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[85vh] modal-bottom-sheet relative"
+            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+            onTouchMove={(e) => {
+              const diff = e.touches[0].clientY - modalTouchStartY;
+              if (diff > 80) setRankingModalOpen(false); // swipe down threshold
+            }}
+          >
+            {/* Standardized Close Button */}
+            <button onClick={() => setRankingModalOpen(false)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
+
             <div className="px-5 py-5 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0">
               <div className="flex items-center gap-3">
                 <div className="bg-luxury-gold/20 p-2 rounded-full text-luxury-gold shadow-[0_0_15px_rgba(212,175,55,0.3)]">
@@ -1781,12 +1827,6 @@ export default function App() {
                   <p className="text-[10px] text-luxury-gold uppercase tracking-widest font-bold">Meilleurs générateurs d'affaires</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setRankingModalOpen(false)} 
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <X size={20} />
-              </button>
             </div>
             
             <div className="p-0 overflow-auto flex-1 bg-black/20">
@@ -1903,19 +1943,28 @@ export default function App() {
 
       {/* MANUAL RESERVATION MODAL (IPHONE STYLE) */}
       {manualModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet">
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setManualModalOpen(false); }}
+        >
+          <div 
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative"
+            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+            onTouchMove={(e) => {
+              const diff = e.touches[0].clientY - modalTouchStartY;
+              if (diff > 80) setManualModalOpen(false); // swipe down threshold
+            }}
+          >
+            {/* Standardized Close Button */}
+            <button onClick={() => setManualModalOpen(false)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
+
             <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111]">
               <div className="flex items-center gap-2">
                 <CalendarIcon size={18} className="text-luxury-gold" />
                 <h3 className="font-semibold text-lg text-white">Réserver par dates</h3>
               </div>
-              <button 
-                onClick={() => setManualModalOpen(false)} 
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                <X size={20} />
-              </button>
             </div>
             
             <div className="p-5 space-y-4">
