@@ -493,6 +493,9 @@ export default function App() {
   };
 
   const handleCellMouseDown = (key: string, data: Reservation | undefined) => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) return;
+
     if (data) {
       // Reserved, open edit directly
       setNom(data.nom || '');
@@ -502,7 +505,6 @@ export default function App() {
       setEditingKeys([key]);
     } else {
       // Toggle selection (Click always works)
-      const isMobile = window.innerWidth < 768;
       
       // Drag selection is enabled ONLY if already selected >= 2 cells (Desktop only)
       // This allows the 3rd cell selection to initiate a drag.
@@ -526,6 +528,9 @@ export default function App() {
   };
 
   const handleCellMouseEnter = (key: string, isReserved: boolean) => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) return;
+
     if (isDraggingRef.current && !isReserved) {
       setSelectedKeys(prev => {
         const next = prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key];
@@ -1238,6 +1243,8 @@ export default function App() {
                       const isDimmed = searchTerm && data && !isSearchMatch && !isVehicleMatch;
                       const dayIsToday = isToday(day);
                       
+                      const isMobile = window.innerWidth <= 768;
+                      
                       return (
                         <td 
                           key={day.toISOString()} 
@@ -1248,10 +1255,10 @@ export default function App() {
                             isWeekend && !dayIsToday ? "bg-white/5 border-opacity-30" : "border-opacity-30",
                             dayIsToday ? "bg-luxury-gold/5 border-r-luxury-gold/30 border-l border-l-luxury-gold/30" : ""
                           )}
-                          onMouseDown={() => handleCellMouseDown(key, data)}
-                          onMouseEnter={() => handleCellMouseEnter(key, !!data)}
-                          onTouchStart={() => handleCellMouseDown(key, data)}
-                          onTouchMove={handleTouchMove}
+                          onMouseDown={!isMobile ? () => handleCellMouseDown(key, data) : undefined}
+                          onMouseEnter={!isMobile ? () => handleCellMouseEnter(key, !!data) : undefined}
+                          onTouchStart={!isMobile ? () => handleCellMouseDown(key, data) : undefined}
+                          onTouchMove={!isMobile ? handleTouchMove : undefined}
                         >
                           <div 
                             style={data?.color ? { backgroundColor: data.color, boxShadow: `0 0 10px ${data.color}` } : {}}
