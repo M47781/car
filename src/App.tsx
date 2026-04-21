@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
 import { supabase } from './lib/supabase';
 import { 
   format, 
@@ -1373,19 +1373,19 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-[#333] animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative"
-            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-            onTouchMove={(e) => {
-              const diff = e.touches[0].clientY - modalTouchStartY;
-              if (diff > 80) closeModal(); // swipe down threshold
-            }}
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-[#333] animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative flex flex-col"
           >
-            {/* Standardized Close Button */}
-            <button onClick={closeModal} className="close-btn" title="Fermer">
-              <X size={18} />
-            </button>
+            {/* Grab Handle for Mobile */}
+            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
 
-            <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111]">
+            <div 
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
+              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+              onTouchMove={(e) => {
+                const diff = e.touches[0].clientY - modalTouchStartY;
+                if (diff > 100) closeModal();
+              }}
+            >
               <h3 className="font-semibold text-lg text-white">Réservation</h3>
             </div>
             
@@ -1413,7 +1413,7 @@ export default function App() {
                     type="text"
                     value={nom}
                     onChange={(e) => setNom(e.target.value)}
-                    className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-status-red transition-colors"
+                    className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-luxury-gold transition-colors"
                     placeholder="Nom complet"
                     autoFocus
                   />
@@ -1425,7 +1425,7 @@ export default function App() {
                     type="text"
                     value={telephone}
                     onChange={(e) => setTelephone(e.target.value)}
-                    className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-status-red transition-colors"
+                    className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-luxury-gold transition-colors"
                     placeholder="N° de téléphone"
                   />
                 </div>
@@ -1436,7 +1436,7 @@ export default function App() {
                     type="text"
                     value={apporteur}
                     onChange={(e) => setApporteur(e.target.value)}
-                    className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-status-red transition-colors"
+                    className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-luxury-gold transition-colors"
                     placeholder="Qui a ramené le client ?"
                   />
                 </div>
@@ -1445,7 +1445,7 @@ export default function App() {
                   <select
                     value={versement}
                     onChange={(e) => setVersement(e.target.value as 'oui' | 'non')}
-                    className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-status-red transition-colors"
+                    className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-luxury-gold transition-colors"
                   >
                     <option value="non">Non</option>
                     <option value="oui">Oui</option>
@@ -1459,7 +1459,7 @@ export default function App() {
                       type="text"
                       value={montant}
                       onChange={(e) => setMontant(e.target.value)}
-                      className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-status-red transition-colors"
+                      className="w-full bg-[#222] border border-[#444] rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:border-luxury-gold transition-colors"
                       placeholder="Ex: 500 €"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') handleSave();
@@ -1496,6 +1496,11 @@ export default function App() {
                 </button>
               </div>
             </div>
+
+            {/* Standardized Close Button */}
+            <button onClick={closeModal} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
           </div>
         </div>
       )}
@@ -1508,19 +1513,19 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setVehicleDetailsModal(null); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[80vh] modal-bottom-sheet relative"
-            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-            onTouchMove={(e) => {
-              const diff = e.touches[0].clientY - modalTouchStartY;
-              if (diff > 80) setVehicleDetailsModal(null); // swipe down threshold
-            }}
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh] modal-bottom-sheet relative"
           >
-            {/* Standardized Close Button */}
-            <button onClick={() => setVehicleDetailsModal(null)} className="close-btn" title="Fermer">
-              <X size={18} />
-            </button>
+            {/* Grab Handle for Mobile */}
+            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
 
-            <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0">
+            <div 
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
+              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+              onTouchMove={(e) => {
+                const diff = e.touches[0].clientY - modalTouchStartY;
+                if (diff > 100) setVehicleDetailsModal(null);
+              }}
+            >
               <div className="flex items-center gap-3">
                 <div className="bg-luxury-gold/10 p-1.5 rounded text-luxury-gold">
                   <Car size={18} />
@@ -1606,6 +1611,11 @@ export default function App() {
                 Fermer
               </button>
             </div>
+
+            {/* Standardized Close Button */}
+            <button onClick={() => setVehicleDetailsModal(null)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
           </div>
         </div>
       )}
@@ -1617,19 +1627,19 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setVehicleToDelete(null); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[80vh] modal-bottom-sheet relative"
-            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-            onTouchMove={(e) => {
-              const diff = e.touches[0].clientY - modalTouchStartY;
-              if (diff > 80) setVehicleToDelete(null); // swipe down threshold
-            }}
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh] modal-bottom-sheet relative"
           >
-            {/* Standardized Close Button */}
-            <button onClick={() => setVehicleToDelete(null)} className="close-btn" title="Fermer">
-              <X size={18} />
-            </button>
+            {/* Grab Handle for Mobile */}
+            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
 
-            <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0">
+            <div 
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
+              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+              onTouchMove={(e) => {
+                const diff = e.touches[0].clientY - modalTouchStartY;
+                if (diff > 100) setVehicleToDelete(null);
+              }}
+            >
               <div className="flex items-center gap-3">
                 <div className="bg-status-red/20 p-1.5 rounded text-status-red">
                   <Trash2 size={18} />
@@ -1741,6 +1751,11 @@ export default function App() {
                 <span className="truncate max-w-[200px]">Supprimer {vehicleToDelete}</span>
               </button>
             </div>
+
+            {/* Standardized Close Button */}
+            <button onClick={() => setVehicleToDelete(null)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
           </div>
         </div>
       )}
@@ -1752,19 +1767,19 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setNewVehicleModalOpen(false); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative"
-            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-            onTouchMove={(e) => {
-              const diff = e.touches[0].clientY - modalTouchStartY;
-              if (diff > 80) setNewVehicleModalOpen(false); // swipe down threshold
-            }}
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative flex flex-col"
           >
-            {/* Standardized Close Button */}
-            <button onClick={() => setNewVehicleModalOpen(false)} className="close-btn" title="Fermer">
-              <X size={18} />
-            </button>
+            {/* Grab Handle for Mobile */}
+            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
 
-            <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111]">
+            <div 
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
+              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+              onTouchMove={(e) => {
+                const diff = e.touches[0].clientY - modalTouchStartY;
+                if (diff > 100) setNewVehicleModalOpen(false);
+              }}
+            >
               <div className="flex items-center gap-2 text-luxury-gold">
                 <Plus size={18} />
                 <h3 className="font-semibold text-lg text-white">Nouveau Véhicule</h3>
@@ -1794,6 +1809,11 @@ export default function App() {
                 Ajouter le véhicule
               </button>
             </div>
+
+            {/* Standardized Close Button */}
+            <button onClick={() => setNewVehicleModalOpen(false)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
           </div>
         </div>
       )}
@@ -1805,19 +1825,19 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setRankingModalOpen(false); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 display-flex flex-col max-h-[85vh] modal-bottom-sheet relative"
-            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-            onTouchMove={(e) => {
-              const diff = e.touches[0].clientY - modalTouchStartY;
-              if (diff > 80) setRankingModalOpen(false); // swipe down threshold
-            }}
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh] modal-bottom-sheet relative"
           >
-            {/* Standardized Close Button */}
-            <button onClick={() => setRankingModalOpen(false)} className="close-btn" title="Fermer">
-              <X size={18} />
-            </button>
+            {/* Grab Handle for Mobile */}
+            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
 
-            <div className="px-5 py-5 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0">
+            <div 
+              className="px-5 py-5 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
+              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+              onTouchMove={(e) => {
+                const diff = e.touches[0].clientY - modalTouchStartY;
+                if (diff > 100) setRankingModalOpen(false);
+              }}
+            >
               <div className="flex items-center gap-3">
                 <div className="bg-luxury-gold/20 p-2 rounded-full text-luxury-gold shadow-[0_0_15px_rgba(212,175,55,0.3)]">
                   <Trophy size={20} />
@@ -1906,6 +1926,11 @@ export default function App() {
                 Fermer
               </button>
             </div>
+
+            {/* Standardized Close Button */}
+            <button onClick={() => setRankingModalOpen(false)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
           </div>
         </div>
       )}
@@ -1948,19 +1973,19 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setManualModalOpen(false); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative"
-            onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-            onTouchMove={(e) => {
-              const diff = e.touches[0].clientY - modalTouchStartY;
-              if (diff > 80) setManualModalOpen(false); // swipe down threshold
-            }}
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative flex flex-col"
           >
-            {/* Standardized Close Button */}
-            <button onClick={() => setManualModalOpen(false)} className="close-btn" title="Fermer">
-              <X size={18} />
-            </button>
+            {/* Grab Handle for Mobile */}
+            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
 
-            <div className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111]">
+            <div 
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
+              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
+              onTouchMove={(e) => {
+                const diff = e.touches[0].clientY - modalTouchStartY;
+                if (diff > 100) setManualModalOpen(false);
+              }}
+            >
               <div className="flex items-center gap-2">
                 <CalendarIcon size={18} className="text-luxury-gold" />
                 <h3 className="font-semibold text-lg text-white">Réserver par dates</h3>
@@ -2051,6 +2076,11 @@ export default function App() {
                 Annuler
               </button>
             </div>
+
+            {/* Standardized Close Button */}
+            <button onClick={() => setManualModalOpen(false)} className="close-btn" title="Fermer">
+              <X size={18} />
+            </button>
           </div>
         </div>
       )}
