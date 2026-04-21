@@ -661,8 +661,8 @@ export default function App() {
   };
 
   const handleManualReserve = async () => {
-    if (!manualVehicle || !manualStartDate || !manualEndDate || !nom.trim() || !user) {
-      showToast("Veuillez remplir tous les champs obligatoires", "error");
+    if (!manualVehicle || !manualStartDate || !manualEndDate || !nom.trim() || !apporteur.trim() || !user) {
+      showToast("Veuillez remplir tous les champs obligatoires (incluant l'apporteur)", "error");
       return;
     }
 
@@ -992,7 +992,7 @@ export default function App() {
       </header>
 
       {/* SUB-HEADER: Date Nav & Stats */}
-      <div className="flex-none flex items-center justify-between px-3 sm:px-4 md:px-8 py-2 md:py-3 bg-luxury-bg border-b border-luxury-border z-10 w-full overflow-x-auto scroller-hidden">
+      <div className="hidden md:flex flex-none items-center justify-between px-3 sm:px-4 md:px-8 py-2 md:py-3 bg-luxury-bg border-b border-luxury-border z-10 w-full overflow-x-auto scroller-hidden">
         <div className="flex items-center gap-2 md:gap-4 shrink-0">
           <button 
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -1075,6 +1075,7 @@ export default function App() {
 
       {/* GRID CONTAINER */}
       <div 
+        id="grid"
         ref={gridContainerRef}
         className="flex-1 overflow-auto bg-black relative scroller grid-container-mobile"
       >
@@ -1306,6 +1307,113 @@ export default function App() {
               <p>Aucun véhicule trouvé.</p>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* MOBILE ONLY FORM */}
+      <div id="mobileForm" className="bg-luxury-bg">
+        <h2 className="text-2xl font-light text-luxury-gold mb-6 uppercase tracking-widest border-b border-luxury-gold/20 pb-4">Réserver un véhicule</h2>
+        
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+              <Car size={14} className="text-luxury-gold" />
+              Véhicule
+            </label>
+            <select 
+              value={manualVehicle}
+              onChange={(e) => setManualVehicle(e.target.value)}
+              className="w-full bg-[#111] border border-luxury-border rounded-lg px-4 py-3 text-white focus:border-luxury-gold outline-none transition-colors appearance-none"
+            >
+              <option value="">Sélectionner un véhicule</option>
+              {allVehicles.map(v => (
+                <option key={v} value={v}>{v}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+                <CalendarIcon size={14} className="text-luxury-gold" />
+                Début
+              </label>
+              <input 
+                type="date" 
+                value={manualStartDate}
+                onChange={(e) => setManualStartDate(e.target.value)}
+                className="w-full bg-[#111] border border-luxury-border rounded-lg px-4 py-3 text-white focus:border-luxury-gold outline-none transition-colors"
+                style={{ colorScheme: 'dark' }}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+                <CalendarIcon size={14} className="text-luxury-gold" />
+                Fin
+              </label>
+              <input 
+                type="date" 
+                value={manualEndDate}
+                onChange={(e) => setManualEndDate(e.target.value)}
+                className="w-full bg-[#111] border border-luxury-border rounded-lg px-4 py-3 text-white focus:border-luxury-gold outline-none transition-colors"
+                style={{ colorScheme: 'dark' }}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+              <Trophy size={14} className="text-luxury-gold" />
+              Apporteur
+            </label>
+            <input 
+              type="text" 
+              placeholder="Nom de l'apporteur"
+              value={apporteur}
+              onChange={(e) => setApporteur(e.target.value)}
+              className="w-full bg-[#111] border border-luxury-border rounded-lg px-4 py-3 text-white focus:border-luxury-gold outline-none transition-colors placeholder:text-gray-600"
+            />
+          </div>
+
+          <div className="space-y-4 pt-4 border-t border-luxury-border">
+            <div className="space-y-2">
+              <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Nom du client</label>
+              <input 
+                type="text" 
+                placeholder="Prénom et Nom"
+                value={nom}
+                onChange={(e) => setNom(e.target.value)}
+                className="w-full bg-[#111] border border-luxury-border rounded-lg px-4 py-3 text-white focus:border-luxury-gold outline-none transition-colors placeholder:text-gray-600"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Téléphone client</label>
+              <input 
+                type="tel" 
+                placeholder="06 XX XX XX XX"
+                value={telephone}
+                onChange={(e) => setTelephone(e.target.value)}
+                className="w-full bg-[#111] border border-luxury-border rounded-lg px-4 py-3 text-white focus:border-luxury-gold outline-none transition-colors placeholder:text-gray-600"
+              />
+            </div>
+          </div>
+
+          <button 
+            onClick={handleManualReserve}
+            className="w-full bg-luxury-gold hover:bg-luxury-gold-hover text-black font-bold py-4 rounded-xl text-sm tracking-[0.2em] uppercase transition-all shadow-[0_0_20px_rgba(212,175,55,0.2)] active:scale-[0.98] mt-4 flex items-center justify-center gap-3"
+          >
+            <CheckCircle2 size={18} />
+            Réserver maintenant
+          </button>
+        </div>
+
+        <div className="mt-8 p-4 bg-luxury-gold/5 border border-luxury-gold/10 rounded-xl">
+          <div className="flex items-start gap-3">
+             <Info size={16} className="text-luxury-gold shrink-0 mt-0.5" />
+             <p className="text-[11px] text-luxury-muted leading-relaxed">
+               Le système vérifiera automatiquement les disponibilités avant de valider votre réservation.
+             </p>
+          </div>
         </div>
       </div>
 
