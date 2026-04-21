@@ -1373,18 +1373,10 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-[#333] animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative flex flex-col"
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-[#333] animate-in fade-in zoom-in-95 duration-200 relative flex flex-col"
           >
-            {/* Grab Handle for Mobile */}
-            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
-
             <div 
-              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
-              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-              onTouchMove={(e) => {
-                const diff = e.touches[0].clientY - modalTouchStartY;
-                if (diff > 100) closeModal();
-              }}
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0"
             >
               <h3 className="font-semibold text-lg text-white">Réservation</h3>
             </div>
@@ -1513,18 +1505,10 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setVehicleDetailsModal(null); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh] modal-bottom-sheet relative"
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh] relative"
           >
-            {/* Grab Handle for Mobile */}
-            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
-
             <div 
-              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
-              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-              onTouchMove={(e) => {
-                const diff = e.touches[0].clientY - modalTouchStartY;
-                if (diff > 100) setVehicleDetailsModal(null);
-              }}
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0"
             >
               <div className="flex items-center gap-3">
                 <div className="bg-luxury-gold/10 p-1.5 rounded text-luxury-gold">
@@ -1627,18 +1611,10 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setVehicleToDelete(null); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh] modal-bottom-sheet relative"
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-[#333] animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh] relative"
           >
-            {/* Grab Handle for Mobile */}
-            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
-
             <div 
-              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
-              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-              onTouchMove={(e) => {
-                const diff = e.touches[0].clientY - modalTouchStartY;
-                if (diff > 100) setVehicleToDelete(null);
-              }}
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0"
             >
               <div className="flex items-center gap-3">
                 <div className="bg-status-red/20 p-1.5 rounded text-status-red">
@@ -1767,18 +1743,10 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setNewVehicleModalOpen(false); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative flex flex-col"
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 relative flex flex-col"
           >
-            {/* Grab Handle for Mobile */}
-            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
-
             <div 
-              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
-              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-              onTouchMove={(e) => {
-                const diff = e.touches[0].clientY - modalTouchStartY;
-                if (diff > 100) setNewVehicleModalOpen(false);
-              }}
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0"
             >
               <div className="flex items-center gap-2 text-luxury-gold">
                 <Plus size={18} />
@@ -1825,18 +1793,10 @@ export default function App() {
           onClick={(e) => { if (e.target === e.currentTarget) setRankingModalOpen(false); }}
         >
           <div 
-            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh] modal-bottom-sheet relative"
+            className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-2xl border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh] relative"
           >
-            {/* Grab Handle for Mobile */}
-            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
-
             <div 
-              className="px-5 py-5 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
-              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-              onTouchMove={(e) => {
-                const diff = e.touches[0].clientY - modalTouchStartY;
-                if (diff > 100) setRankingModalOpen(false);
-              }}
+              className="px-5 py-5 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0"
             >
               <div className="flex items-center gap-3">
                 <div className="bg-luxury-gold/20 p-2 rounded-full text-luxury-gold shadow-[0_0_15px_rgba(212,175,55,0.3)]">
@@ -1975,16 +1935,8 @@ export default function App() {
           <div 
             className="bg-[#1A1A1A] rounded-xl shadow-2xl overflow-hidden w-full max-w-sm border border-luxury-gold/30 animate-in fade-in zoom-in-95 duration-200 modal-bottom-sheet relative flex flex-col"
           >
-            {/* Grab Handle for Mobile */}
-            <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mt-3 mb-1 md:hidden shrink-0" />
-
             <div 
-              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0 cursor-grab active:cursor-grabbing"
-              onTouchStart={(e) => setModalTouchStartY(e.touches[0].clientY)}
-              onTouchMove={(e) => {
-                const diff = e.touches[0].clientY - modalTouchStartY;
-                if (diff > 100) setManualModalOpen(false);
-              }}
+              className="px-5 py-4 border-b border-[#333] flex justify-between items-center bg-[#111] shrink-0"
             >
               <div className="flex items-center gap-2">
                 <CalendarIcon size={18} className="text-luxury-gold" />
