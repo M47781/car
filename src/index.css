@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+/* Tailwind CSS v4 Theme Configuration */
+/* NOTE: The @theme warning is a temporary linter mismatch - Tailwind v4 uses this to define theme variables. */
+
+/* stylelint-disable */
+@theme {
+  --color-luxury-bg: #050505;
+  --color-luxury-card: #111111;
+  --color-luxury-border: #222222;
+  --color-luxury-text: #F3F4F6;
+  --color-luxury-muted: #9CA3AF;
+  --color-luxury-gold: #D4AF37;
+  
+  --color-status-green: #10B981;
+  --color-status-red: #EF4444;
+  --color-status-orange: #F59E0B;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-luxury-bg);
+    color: var(--color-luxury-text);
+  }
+}
+
+@layer utilities {
+  .scroller::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .scroller::-webkit-scrollbar-track {
+    background: var(--color-luxury-bg);
+  }
+  .scroller::-webkit-scrollbar-thumb {
+    background: var(--color-luxury-border);
+    border-radius: 5px;
+  }
+  .scroller::-webkit-scrollbar-thumb:hover {
+    background: var(--color-luxury-muted);
+  }
+
+  .scroller-hidden::-webkit-scrollbar {
+    display: none;
+  }
+  .scroller-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Sidebar Transitions */
+  .vehicle-column {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+
+  .vehicle-column-closed {
+    width: 50px !important;
+    min-width: 50px !important;
+    max-width: 50px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    opacity: 1;
+  }
+
+  /* Mobile Sidebar Overlay */
+  @media (max-width: 768px) {
+    .sidebar-overlay-active {
+      width: 280px !important;
+      min-width: 280px !important;
+      position: sticky !important;
+      left: 0;
+      z-index: 50 !important;
+      box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+    }
+  }
+
+
+  /* Fix for mobile scroll while selecting */
+  .scroller {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  td[data-key] {
+    touch-action: manipulation;
+  }
+  
+  .grid-container-mobile {
+    touch-action: manipulation;
+  }
+}
+
+/* Modern Header Styles */
+.header-modern {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  background: #111; /* dark background */
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 2px solid #222;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 0 20px rgba(212,175,55,0.05);
+  border-radius: 0 0 16px 16px;
+}
+
+/* iPhone Optimized Bottom Sheets */
+@media (max-width: 768px) {
+  .modal-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto !important;
+    transform: none !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 92vh;
+    border-bottom: none !important;
+    padding-bottom: env(safe-area-inset-bottom);
+    animation: slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .grid-container-mobile {
+    padding-bottom: calc(85px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid #222;
+    padding-bottom: env(safe-area-inset-bottom);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: calc(70px + env(safe-area-inset-bottom));
+    z-index: 100;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+  }
+}
