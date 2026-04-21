@@ -1073,10 +1073,19 @@ export default function App() {
         </div>
       </div>
 
+      {/* MOBILE INFO BANNER */}
+      <div className="md:hidden mobile-info">
+        <Info size={16} />
+        📱 الحجز يتم عبر الفورم فقط في الهاتف
+      </div>
+
       {/* GRID CONTAINER */}
       <div 
         ref={gridContainerRef}
-        className="flex-1 overflow-auto bg-black relative scroller grid-container-mobile"
+        className={cn(
+          "flex-1 overflow-auto bg-black relative scroller grid-container-mobile",
+          "md:pointer-events-auto max-md:grid-read-only"
+        )}
       >
         
         {/* Mobile Backdrop Overlay */}

@@ -150,8 +150,8 @@
 
   .fab-button {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: calc(85px + env(safe-area-inset-bottom));
+    right: 20px;
     z-index: 100;
     width: 64px;
     height: 64px;
@@ -168,5 +168,28 @@
 
   .fab-button:active {
     transform: scale(0.9) rotate(-10deg);
+  }
+
+  /* Force Form Usage on Mobile */
+  .grid-read-only {
+    pointer-events: none;
+    opacity: 0.6;
+    user-select: none;
+    filter: saturate(0.5);
+  }
+
+  .mobile-info {
+    background: rgba(212, 175, 55, 0.1);
+    border-bottom: 2px solid rgba(212, 175, 55, 0.1);
+    color: var(--color-luxury-gold);
+    padding: 12px 20px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(10px);
   }
 }
